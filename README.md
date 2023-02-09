@@ -12,7 +12,7 @@ go get github.com/speakeasy-sdks/rivet-go-sdk
 
 ## Authentication
 
-Signup for [access](https://www.leapml.dev/signup) to LeapML to use the API. 
+Signup for [access]([https://www.leapml.dev/signup](https://hub.rivet.gg/developer/dashboard)) to Rivet to use the API. 
 
 ## SDK Example Usage
 <!-- Start SDK Example Usage -->
