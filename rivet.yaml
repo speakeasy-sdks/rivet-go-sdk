@@ -1,0 +1,400 @@
+openapi: 3.0.1
+info:
+  title: Rivet API
+  version: ''
+paths:
+  /lobbies/closed:
+    put:
+      description: >
+        If `is_closed` is `true`, players will be prevented from joining the
+        lobby.
+
+        Does not shutdown the lobby.
+      operationId: LobbiesService.setClosed
+      tags:
+        - MatchmakerLobbies
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      servers:
+        - url: https://party.api.rivet.gg/v1
+      security: &ref_0
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_closed:
+                  type: boolean
+              required:
+                - is_closed
+  /lobbies/find:
+    post:
+      description: |
+        Finds a lobby based on the given criteria.
+        If a lobby is not found and `prevent_auto_create_lobby` is `true`, 
+        a new lobby will be created.
+      operationId: LobbiesService.find
+      tags:
+        - MatchmakerLobbies
+      parameters:
+        - name: origin
+          in: header
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchmakerFindLobbyOutput'
+      servers:
+        - url: https://party.api.rivet.gg/v1
+      security:
+        - BearerAuth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                game_modes:
+                  type: array
+                  items:
+                    type: string
+                regions:
+                  type: array
+                  items:
+                    type: string
+                prevent_auto_create_lobby:
+                  type: boolean
+                captcha:
+                  $ref: '#/components/schemas/CommonsCaptchaConfig'
+              required:
+                - game_modes
+  /lobbies/join:
+    post:
+      description: |
+        Joins a specific lobby.
+        This request will use the direct player count configured for the
+        lobby group.
+      operationId: LobbiesService.join
+      tags:
+        - MatchmakerLobbies
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchmakerJoinLobbyOutput'
+      servers:
+        - url: https://party.api.rivet.gg/v1
+      security:
+        - BearerAuth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                lobby_id:
+                  type: string
+                captcha:
+                  $ref: '#/components/schemas/CommonsCaptchaConfig'
+              required:
+                - lobby_id
+  /lobbies/list:
+    get:
+      description: Lists all open lobbies.
+      operationId: LobbiesService.list
+      tags:
+        - MatchmakerLobbies
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchmakerListLobbiesOutput'
+      servers:
+        - url: https://party.api.rivet.gg/v1
+      security:
+        - BearerAuth
+  /regions:
+    get:
+      description: >
+        Returns a list of regions available to this namespace.
+
+
+        Regions are sorted by most optimal to least optimal. The player's IP
+        address
+
+        is used to calculate the regions' optimality.
+      operationId: RegionsService.list
+      tags:
+        - MatchmakerRegions
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchmakerListRegionsOutput'
+      servers:
+        - url: https://party.api.rivet.gg/v1
+      security:
+        - BearerAuth
+components:
+  schemas:
+    CommonsCaptchaConfig:
+      oneOf:
+        - type: object
+          allOf:
+            - $ref: '#/components/schemas/CommonsCaptchaConfigHcaptcha'
+            - type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - hcaptcha
+      description: Methods to verify a captcha
+    CommonsCaptchaConfigHcaptcha:
+      type: object
+      description: Captcha configuration.
+      properties:
+        client_response:
+          type: string
+      required:
+        - client_response
+    CommonsIdentifier:
+      type: string
+      description: >-
+        A human readable short identifier used to references resources.
+        Different than a `uuid` because this is intended to be human readable.
+        Different than `DisplayName` because this should not include special
+        characters and be short.
+    CommonsJWT:
+      type: string
+      description: Documentation at https://jwt.io/
+    CommonsDisplayName:
+      type: string
+    CommonsCoord:
+      type: object
+      description: Geographical coordinates for a location on Planet Earth.
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+      required:
+        - latitude
+        - longitude
+    CommonsDistance:
+      type: object
+      description: Distance available in multiple units.
+      properties:
+        kilometers:
+          type: number
+          format: double
+        miles:
+          type: number
+          format: double
+      required:
+        - kilometers
+        - miles
+    CommonsMatchmakerLobbyJoinInfo:
+      type: object
+      description: A matchmaker lobby.
+      properties:
+        lobby_id:
+          type: string
+          format: uuid
+        region:
+          $ref: '#/components/schemas/CommonsMatchmakerLobbyJoinInfoRegion'
+        ports:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonsMatchmakerLobbyJoinInfoPort'
+        player:
+          $ref: '#/components/schemas/CommonsMatchmakerLobbyJoinInfoPlayer'
+      required:
+        - lobby_id
+        - region
+        - ports
+        - player
+    CommonsMatchmakerLobbyJoinInfoRegion:
+      type: object
+      description: A matchmaker lobby region.
+      properties:
+        region_id:
+          $ref: '#/components/schemas/CommonsIdentifier'
+        display_name:
+          $ref: '#/components/schemas/CommonsDisplayName'
+      required:
+        - region_id
+        - display_name
+    CommonsMatchmakerLobbyJoinInfoPort:
+      type: object
+      properties:
+        host:
+          type: string
+          description: |
+            The host for the given port. Will be null if using a port range.
+        hostname:
+          type: string
+        port:
+          type: integer
+          description: |
+            The port number for this lobby. Will be null if using a port range.
+        port_range:
+          $ref: '#/components/schemas/CommonsMatchmakerLobbyJoinInfoPortRange'
+          description: >
+            Whether or not this lobby port uses TLS. You cannot mix a non-TLS
+            and TLS ports.
+        is_tls:
+          type: boolean
+      required:
+        - hostname
+        - port_range
+        - is_tls
+    CommonsMatchmakerLobbyJoinInfoPortRange:
+      type: object
+      description: Inclusive range of ports that can be connected to.
+      properties:
+        min:
+          type: integer
+          description: Minimum port that can be connected to. Inclusive range.
+        max:
+          type: integer
+          description: Maximum port that can be connected to. Inclusive range.
+      required:
+        - min
+        - max
+    CommonsMatchmakerLobbyJoinInfoPlayer:
+      type: object
+      description: A matchmaker lobby player.
+      properties:
+        token:
+          $ref: '#/components/schemas/CommonsJWT'
+          description: >
+            Pass this token through the socket to the lobby server. The lobby
+            server will validate this token with `PlayerConnected.player_token`
+      required:
+        - token
+    MatchmakerLobbyInfo:
+      type: object
+      description: A public lobby in the lobby list.
+      properties:
+        region_id:
+          type: string
+        game_mode_id:
+          type: string
+        lobby_id:
+          type: string
+          format: uuid
+        max_players_normal:
+          type: integer
+        max_players_direct:
+          type: integer
+        max_players_party:
+          type: integer
+        total_player_count:
+          type: integer
+      required:
+        - region_id
+        - game_mode_id
+        - lobby_id
+        - max_players_normal
+        - max_players_direct
+        - max_players_party
+        - total_player_count
+    MatchmakerGameModeInfo:
+      type: object
+      description: A game mode that the player can join.
+      properties:
+        game_mode_id:
+          $ref: '#/components/schemas/CommonsIdentifier'
+      required:
+        - game_mode_id
+    MatchmakerRegionInfo:
+      type: object
+      description: A region that the player can connect to.
+      properties:
+        region_id:
+          $ref: '#/components/schemas/CommonsIdentifier'
+        provider_display_name:
+          type: string
+          format: uuid
+        region_display_name:
+          type: string
+          format: uuid
+        datacenter_coord:
+          $ref: '#/components/schemas/CommonsCoord'
+        datacenter_distance_from_client:
+          $ref: '#/components/schemas/CommonsDistance'
+      required:
+        - region_id
+        - provider_display_name
+        - region_display_name
+        - datacenter_coord
+        - datacenter_distance_from_client
+    MatchmakerFindLobbyOutput:
+      type: object
+      properties:
+        lobby:
+          $ref: '#/components/schemas/CommonsMatchmakerLobbyJoinInfo'
+      required:
+        - lobby
+    MatchmakerJoinLobbyOutput:
+      type: object
+      properties:
+        lobby:
+          $ref: '#/components/schemas/CommonsMatchmakerLobbyJoinInfo'
+      required:
+        - lobby
+    MatchmakerListLobbiesOutput:
+      type: object
+      properties:
+        game_modes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchmakerGameModeInfo'
+        regions:
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchmakerRegionInfo'
+        lobbies:
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchmakerLobbyInfo'
+      required:
+        - game_modes
+        - regions
+        - lobbies
+    MatchmakerListRegionsOutput:
+      type: object
+      properties:
+        regions:
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchmakerRegionInfo'
+      required:
+        - regions
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
