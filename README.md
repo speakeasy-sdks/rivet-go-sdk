@@ -1,4 +1,6 @@
-# github.com/speakeasy-sdks/rivet-go-sdk
+# Rivet Go SDK
+
+The backbone of Multiplayer Experiences.  [Simple APIs for serverless lobbies, matchmaking, CDN, and other features](https://docs.rivet.gg/general/introduction) managed directly within an easy to use dashboard. Launch your multiplayer game on any platform with the tools you already use.
 
 <!-- Start SDK Installation -->
 ## SDK Installation
@@ -7,6 +9,10 @@
 go get github.com/speakeasy-sdks/rivet-go-sdk
 ```
 <!-- End SDK Installation -->
+
+## Authentication
+
+Signup for [access](https://www.leapml.dev/signup) to LeapML to use the API. 
 
 ## SDK Example Usage
 <!-- Start SDK Example Usage -->
