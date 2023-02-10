@@ -1,8 +1,8 @@
 management:
     openapi-checksum: 4e33d044c820e10e5e22adfd6b3fde50
     openapi-version: ""
-    speakeasy-version: 1.1.2
+    speakeasy-version: 1.2.0
 go:
-    version: 0.1.0
+    version: 0.2.0
     packagename: github.com/speakeasy-sdks/rivet-go-sdk
 sdkclassname: rivet
