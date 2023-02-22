@@ -39,5 +39,5 @@ type LobbiesServiceJoinRequest struct {
 type LobbiesServiceJoinResponse struct {
 	ContentType               string
 	MatchmakerJoinLobbyOutput *shared.MatchmakerJoinLobbyOutput
-	StatusCode                int64
+	StatusCode                int
 }

@@ -46,5 +46,5 @@ type LobbiesServiceFindRequest struct {
 type LobbiesServiceFindResponse struct {
 	ContentType               string
 	MatchmakerFindLobbyOutput *shared.MatchmakerFindLobbyOutput
-	StatusCode                int64
+	StatusCode                int
 }

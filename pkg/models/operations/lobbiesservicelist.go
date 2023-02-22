@@ -20,5 +20,5 @@ type LobbiesServiceListRequest struct {
 type LobbiesServiceListResponse struct {
 	ContentType                 string
 	MatchmakerListLobbiesOutput *shared.MatchmakerListLobbiesOutput
-	StatusCode                  int64
+	StatusCode                  int
 }
