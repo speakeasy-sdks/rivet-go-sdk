@@ -39,3 +39,11 @@ Based on:
 - Speakeasy CLI 1.4.8 https://github.com/speakeasy-api/speakeasy
 ### Releases
 - [Go v0.5.0] https://github.com/speakeasy-sdks/rivet-go-sdk/releases/tag/v0.5.0 - ./
+
+## Version 0.6.0
+### Changes
+Based on:
+- OpenAPI Doc  ./rivet.yaml
+- Speakeasy CLI 1.5.0 https://github.com/speakeasy-api/speakeasy
+### Releases
+- [Go v0.6.0] https://github.com/speakeasy-sdks/rivet-go-sdk/releases/tag/v0.6.0 - ./
