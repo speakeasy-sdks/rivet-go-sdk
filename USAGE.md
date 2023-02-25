@@ -3,6 +3,7 @@
 package main
 
 import (
+    "context"
     "log"
     "github.com/speakeasy-sdks/rivet-go-sdk"
     "github.com/speakeasy-sdks/rivet-go-sdk/pkg/models/shared"
@@ -37,7 +38,8 @@ func main() {
             },
         },
     }
-    
+
+    ctx := context.Background()
     res, err := s.MatchmakerLobbies.LobbiesServiceFind(ctx, req)
     if err != nil {
         log.Fatal(err)
@@ -46,5 +48,6 @@ func main() {
     if res.MatchmakerFindLobbyOutput != nil {
         // handle response
     }
+}
 ```
 <!-- End SDK Example Usage -->
