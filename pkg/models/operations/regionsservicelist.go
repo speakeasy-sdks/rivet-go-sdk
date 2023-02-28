@@ -20,5 +20,5 @@ type RegionsServiceListRequest struct {
 type RegionsServiceListResponse struct {
 	ContentType                 string
 	MatchmakerListRegionsOutput *shared.MatchmakerListRegionsOutput
-	StatusCode                  int64
+	StatusCode                  int
 }

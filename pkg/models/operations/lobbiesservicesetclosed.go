@@ -24,5 +24,5 @@ type LobbiesServiceSetClosedRequest struct {
 
 type LobbiesServiceSetClosedResponse struct {
 	ContentType string
-	StatusCode  int64
+	StatusCode  int
 }
