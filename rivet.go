@@ -45,8 +45,8 @@ func WithClient(client HTTPClient) SDKOption {
 func New(opts ...SDKOption) *Rivet {
 	sdk := &Rivet{
 		_language:   "go",
-		_sdkVersion: "0.7.0",
-		_genVersion: "1.5.3",
+		_sdkVersion: "0.8.0",
+		_genVersion: "1.5.4",
 	}
 	for _, opt := range opts {
 		opt(sdk)
